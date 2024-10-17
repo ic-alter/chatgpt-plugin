@@ -40,7 +40,7 @@ export class Entertainment extends plugin {
           permission: 'master'
         },
         {
-          reg: `^(${emojiRegex()}){2}$`,
+          reg: `^(${emojiRegex()})(${emojiRegex()})$`,
           fnc: 'combineEmoj'
         },
         {
@@ -338,11 +338,18 @@ ${translateLangLabels}
   }
 
   async combineEmoj (e) {
-    let left = e.msg.codePointAt(0).toString(16).toLowerCase()
-    let right = e.msg.codePointAt(2).toString(16).toLowerCase()
-    if (left === right) {
+    const regex = new RegExp(`^(${emojiRegex()})(${emojiRegex()})$`) 
+    const match = e.msg.match(regex);
+    const emojis = [match[1], match[2]];
+    logger.mark(Array.from(emojis[0]).map(code => code.codePointAt(0).toString(16)).join('-'))
+    logger.mark(Array.from(emojis[1]).map(code => code.codePointAt(0).toString(16)).join('-'))
+    //let left = e.msg.codePointAt(0).toString(16).toLowerCase()
+    //let right = e.msg.codePointAt(2).toString(16).toLowerCase()
+    let left = Array.from(emojis[0]).map(code => code.codePointAt(0).toString(16)).join('-').toLowerCase()
+    let right = Array.from(emojis[1]).map(code => code.codePointAt(0).toString(16)).join('-').toLowerCase()
+    /*if (left === right) {
       return false
-    }
+    }*/
     mkdirs('data/chatgpt/emoji')
     logger.info('combine ' + e.msg)
     let resultFileLoc = `data/chatgpt/emoji/${left}_${right}.jpg`
@@ -359,13 +366,13 @@ ${translateLangLabels}
     logger.mark(`合成emoji：${left} ${right}`)
     let url
     if (emojDataJson[right]) {
-      let find = emojDataJson[right].find(item => item.leftEmoji === left)
+      let find = emojDataJson[right][left]
       if (find) {
         url = googleRequestUrl(find)
       }
     }
     if (!url && emojDataJson[left]) {
-      let find = emojDataJson[left].find(item => item.leftEmoji === right)
+      let find = emojDataJson[left][right]
       if (find) {
         url = googleRequestUrl(find)
       }
