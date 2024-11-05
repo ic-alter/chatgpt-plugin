@@ -1,6 +1,6 @@
 #这个脚本用来更新可合成表情包的列表
 #首先用这个命令下载最新的列表文件
-#curl -L --compressed https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json -o 你要下载的路径可以是./metadata.json
+#curl -L --compressed https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json -o ./metadata.json
 #然后运行此脚本进行格式转换变成适合插件的格式。
 #注意输出的文件名是output.json，防止忘记备份导致丢失原本的版本
 #源接口来源 https://github.com/xsalazar/emoji-kitchen
