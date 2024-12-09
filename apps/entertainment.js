@@ -363,10 +363,12 @@ ${translateLangLabels}
         url = googleRequestUrl(find)
       }
     }
+    let text = String.fromCodePoint(parseInt(right, 16))+String.fromCodePoint(parseInt(left, 16))
     let image = segment.image(url)
     image.asface = true
-    await this.reply(image, true)
-    return false
+    await this.reply(image)
+    this.reply(text)
+    return true
   }
 
   async combineEmoj (e) {
