@@ -44,6 +44,10 @@ export class Entertainment extends plugin {
           fnc: 'combineEmoj'
         },
         {
+          reg: `^#?(随机)?(emoji|Emoji)$`,
+          fnc: 'randomEmoji'
+        },
+        {
           reg: '^#?(今日词云|群友在聊什么)$',
           fnc: 'wordcloud'
         },
@@ -52,7 +56,7 @@ export class Entertainment extends plugin {
           fnc: 'wordcloud_latest'
         },
         {
-          reg: '^#(我的)?(本月|本周|今日)?词云$',
+          reg: '^#?(我的)?(本月|本周|今日)?词云$',
           fnc: 'wordcloud_new'
         },
         {
@@ -337,6 +341,34 @@ ${translateLangLabels}
     }
   }
 
+  async randomEmoji(e){
+    const _path = process.cwd()
+    const fullPath = fs.realpathSync(`${_path}/plugins/chatgpt-plugin/resources/emojiData.json`)
+    const data = fs.readFileSync(fullPath)
+    let emojDataJson = JSON.parse(data)
+    let url
+    const firstLevelKeys = Object.keys(emojDataJson)
+    const randomFirstLevelKey = firstLevelKeys[Math.floor(Math.random() * firstLevelKeys.length)];
+    const secondLevelMap = emojDataJson[randomFirstLevelKey];
+    // 获取二级 Map 的所有键
+    const secondLevelKeys = Object.keys(secondLevelMap);
+    // 随机选择二级 Map 中的一个键值对
+    const randomSecondLevelKey = secondLevelKeys[Math.floor(Math.random() * secondLevelKeys.length)];
+    let right = randomFirstLevelKey
+    let left = randomSecondLevelKey
+    logger.mark(`合成emoji：${left} ${right}`)
+    if (emojDataJson[right]) {
+      let find = emojDataJson[right][left]
+      if (find) {
+        url = googleRequestUrl(find)
+      }
+    }
+    let image = segment.image(url)
+    image.asface = true
+    await this.reply(image, true)
+    return false
+  }
+
   async combineEmoj (e) {
     const regex = new RegExp(`^(${emojiRegex()})(${emojiRegex()})$`) 
     const match = e.msg.match(regex);
@@ -357,7 +389,7 @@ ${translateLangLabels}
       let image = segment.image(resultFileLoc)
       image.asface = true
       await this.reply(image, true)
-      return true
+      return false
     }
     const _path = process.cwd()
     const fullPath = fs.realpathSync(`${_path}/plugins/chatgpt-plugin/resources/emojiData.json`)
