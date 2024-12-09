@@ -2,7 +2,7 @@
 #首先用这个命令下载最新的列表文件
 #curl -L --compressed https://raw.githubusercontent.com/xsalazar/emoji-kitchen-backend/main/app/metadata.json -o ./metadata.json
 #然后运行此脚本进行格式转换变成适合插件的格式。
-#注意输出的文件名是output.json，防止忘记备份导致丢失原本的版本
+#注意输出的文件名是output.json，防止忘记备份导致丢失原本的版本.重命名为emojiData.json
 #源接口来源 https://github.com/xsalazar/emoji-kitchen
 
 
