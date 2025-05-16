@@ -8,7 +8,7 @@ class Tokenizer {
       throw new Error('no valid group id')
     }
     let group = e.bot.pickGroup(groupId, true)
-    let latestChat = await group.getChatHistory(undefined, 1)
+    let latestChat = await group.getChatHistory(undefined, 100)
     let seq = latestChat[0].seq
     let chats = latestChat
     function compareByTime (a, b) {
@@ -93,7 +93,7 @@ class Tokenizer {
       )
       .map(c => {
         // let length = c.length
-        let threshold = 2
+        let threshold = 6
         // if (length < 100 && length > 50) {
         //   threshold = 6
         // } else if (length <= 50 && length > 25) {
@@ -132,7 +132,7 @@ class Tokenizer {
       return 0
     }
     logger.mark('分词统计完成，绘制词云中...')
-    return list.filter(s => s[1] > 2).sort(compareByFrequency).slice(0, topK)
+    return list.filter(s => s[1] > 1).sort(compareByFrequency).slice(0, topK)
   }
 }
 
