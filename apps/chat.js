@@ -619,7 +619,7 @@ export class chatgpt extends plugin {
     let confirm = await redis.get('CHATGPT:CONFIRM')
     let confirmOn = (!confirm || confirm === 'on') // confirm默认开启
     if (confirmOn) {
-      await this.reply('我正在思考如何回复你，请稍等', true, { recallMsg: 8 })
+      await this.reply('我正在思考如何回复你，请稍等', true)
     }
     const emotionFlag = await redis.get(`CHATGPT:WRONG_EMOTION:${e.sender.user_id}`)
     let userReplySetting = await getUserReplySetting(this.e)
